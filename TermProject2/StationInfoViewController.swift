@@ -27,6 +27,8 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
     
     var serviceAreaCode = NSMutableString()
     var serviceAreaCodeNum = ""
+    var serviceAreaCode2 = NSMutableString()
+    var serviceAreaCodeNum2 = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +38,9 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
         beginParsing()
         // Do any additional setup after loading the view.
     }
+    @IBAction func doneToStationInfoView(segue:UIStoryboardSegue){
+    }
+    
     func beginParsing(){
         posts = []
         parser = XMLParser(contentsOf: (URL(string: url!))!)!
@@ -59,6 +64,8 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
             telNo = ""
             serviceAreaCode = NSMutableString()
             serviceAreaCode = ""
+            serviceAreaCode2 = NSMutableString()
+            serviceAreaCode2 = ""
         }
     }
     func parser(_ parser: XMLParser, foundCharacters string: String) {
@@ -70,6 +77,8 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
             telNo.append(string)
         }else if element.isEqual(to: "serviceAreaCode"){
             serviceAreaCode.append(string)
+        }else if element.isEqual(to: "serviceAreaCode2"){
+            serviceAreaCode2.append(string)
         }
     }
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
@@ -89,24 +98,26 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 5
+        return posts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0{
             let convenienceCell = tableView.dequeueReusableCell(withIdentifier: "ConvenienceCell", for: indexPath)
-            
             convenienceCell.detailTextLabel?.text = posts[0]
             return convenienceCell
         }else if indexPath.row == 1 {
             let foodCell = tableView.dequeueReusableCell(withIdentifier: "FoodCell", for: indexPath)
-            //cell.textLabel?.text = postsname[indexPath.row]
             foodCell.detailTextLabel?.text = posts[1]
             return foodCell
         }
+        else if indexPath.row == 2{
+            let themeCell = tableView.dequeueReusableCell(withIdentifier: "ThemeCell",for: indexPath)
+            themeCell.textLabel?.text = "테마휴게소"
+            return themeCell
+        }
         else if indexPath.row == 4 {
             let telNoCell = tableView.dequeueReusableCell(withIdentifier: "TelNoCell", for: indexPath)
-            //cell.textLabel?.text = postsname[indexPath.row]
             telNoCell.detailTextLabel?.text = posts[4]
             return telNoCell
         }
@@ -126,29 +137,19 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
                     mapViewController.url = "http://data.ex.co.kr/openapi/locationinfo/locationinfoRest?key=test&type=xml&numOfRows=100&serviceAreaCode=" + serviceAreaCodeNum
                 }
             }
-        /*if segue.identifier == "segueToDetailView"{
-            if let cell = sender as? UITableViewCell{
-                let indexPath = tableView.indexPath(for: cell)
-                stationName = (posts.object(at: (indexPath?.row)!)as AnyObject).value(forKey: "serviceAreaName")as! NSString as String
-                //url에서 한글을 쓸 수 있도로 코딩
-                stationName_utf8 = stationName.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-                //선택한 row의 병원명을 추가해 url을 구성하고 넘겨줌
-                if let navController = segue.destination as? UINavigationController{
-                    if let stationInfoViewController = navController.topViewController as? StationInfoViewController{
-                        stationInfoViewController.url = url! + "&serviceAreaName="+stationName_utf8*/
-        if segue.identifier == "segueToThemeView"{
-            
-        }
+     
+        //먹거리url "http://data.ex.co.kr/openapi/restinfo/restBestfoodList?key=7237197557&type=xml&numOfRows=100" + "&stdRestCd=" + serviceAreaCodeNum2
         
+            if segue.identifier == "segueToThemeView"{
+                serviceAreaCodeNum2 = serviceAreaCode2 as String
+                if let navController = segue.destination as? UINavigationController{
+                    if let themeViewController = navController.topViewController as? ThemeViewController{
+                        themeViewController.url = "http://data.ex.co.kr/openapi/restinfo/restThemeList?key=7237197557&type=xml&stdRestCd=" + serviceAreaCodeNum2
+                    }
+                }
+            }
+        
+        }
+    
     }
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-}

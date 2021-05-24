@@ -78,9 +78,9 @@
 				A133E1932654074A00206C00 /* RestAreaListViewController.swift */,
 				A133E1EA265551B200206C00 /* StationInfoViewController.swift */,
 				A133E190265406B700206C00 /* MapViewController.swift */,
+				A122C582265AA75C00167C57 /* ThemeViewController.swift */,
 				A133E1EF2656A9BF00206C00 /* Stations.swift */,
 				A122C57E265A927000167C57 /* FoodListViewController.swift */,
-				A122C582265AA75C00167C57 /* ThemeViewController.swift */,
 			);
 			path = TermProject2;
 			sourceTree = "<group>";
