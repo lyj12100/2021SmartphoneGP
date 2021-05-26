@@ -10,6 +10,7 @@ import UIKit
 class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableViewDataSource, XMLParserDelegate{
 
     @IBOutlet weak var tbData: UITableView!
+    @IBOutlet weak var imageView: UIImageView!
     
     
     
@@ -30,12 +31,15 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
     var serviceAreaCode2 = NSMutableString()
     var serviceAreaCodeNum2 = ""
     
+    var image : UIImage?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tbData.delegate = self
         tbData.dataSource = self
         
         beginParsing()
+        loadImages()
         // Do any additional setup after loading the view.
     }
     @IBAction func doneToStationInfoView(segue:UIStoryboardSegue){
@@ -54,7 +58,7 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         element = elementName as NSString
         if(elementName as NSString).isEqual(to: "list"){
-            posts = ["","","","","",""]
+            posts = ["","","","",""]
             
             convenience = NSMutableString()
             convenience = ""
@@ -96,6 +100,13 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
             
         }
     }
+    
+    func loadImages(){
+        image = UIImage(named: "common.png")
+        imageView.image = image
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return posts.count
