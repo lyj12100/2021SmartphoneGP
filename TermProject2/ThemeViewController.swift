@@ -32,9 +32,12 @@ class ThemeViewController: UIViewController, XMLParserDelegate,
         beginParsing()
         themeText.delegate = self
         
-        
+        if(!posts.isEmpty){
             themeText.text = posts[0]
             themeTitleText.text = posts[1]
+        }else if (posts.isEmpty){
+            themeTitleText.text = "테마휴게소 정보가 없습니다."
+        }
         
         // Do any additional setup after loading the view.
     }

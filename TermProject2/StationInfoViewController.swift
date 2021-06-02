@@ -30,6 +30,8 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
     var serviceAreaCodeNum = ""
     var serviceAreaCode2 = NSMutableString()
     var serviceAreaCodeNum2 = ""
+    var stationname = ""
+    var stationname_utf8 = ""
     
     var image : UIImage?
     
@@ -94,17 +96,23 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
                 posts[1] = batchMenu as String
             }
             
-            if !telNo.isEqual(nil){
+            /*if !telNo.isEqual(nil){
                 posts[4] = telNo as String
+            }*/
+            if !serviceAreaCode2.isEqual(nil){
+                posts[4] = serviceAreaCode2 as String
             }
-            
         }
     }
     
     func loadImages(){
-        image = UIImage(named: "common.png")
-        imageView.image = image
-    }
+        var imageNum : String = ""
+        imageNum = serviceAreaCode2 as String
+        //if(serviceAreaCode2 as String == "000001"){
+            image = UIImage(named: "\(imageNum).jpeg")
+            imageView.image = image
+        //}
+        print("넘버 = \(imageNum)")    }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -148,8 +156,17 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
                     mapViewController.url = "http://data.ex.co.kr/openapi/locationinfo/locationinfoRest?key=test&type=xml&numOfRows=100&serviceAreaCode=" + serviceAreaCodeNum
                 }
             }
+        
+      
      
         //먹거리url "http://data.ex.co.kr/openapi/restinfo/restBestfoodList?key=7237197557&type=xml&numOfRows=100" + "&stdRestCd=" + serviceAreaCodeNum2
+        if segue.identifier == "segueToFoodView"{
+            serviceAreaCodeNum2 = serviceAreaCode2 as String
+            if let foodListViewController = segue.destination as? FoodListViewController{
+                foodListViewController.url = "http://data.ex.co.kr/openapi/restinfo/restBestfoodList?key=7237197557&type=xml&numOfRows=100" + "&stdRestCd=" + serviceAreaCodeNum2
+            }
+        }
+          
         
             if segue.identifier == "segueToThemeView"{
                 serviceAreaCodeNum2 = serviceAreaCode2 as String
@@ -160,7 +177,8 @@ class StationInfoViewController: UIViewController ,UITableViewDelegate, UITableV
                 }
             }
         
+        
+        
         }
     
     }
-
